@@ -9,21 +9,21 @@ npm i -g @forjagames/unitypm
 ## Create a new package
 In your Assets folder
 ```
-unitypm init
+upm init
 ```
 
 Then
 ```
-unitypm publish
+upm publish
 ```
 
 ## Install the package
 In a folder
 ```
-unitypm install <my package name>
+upm install <my package name>
 ```
 
 Example
 ```
-unitypm install code-in-unity
+upm install code-in-unity
 ```

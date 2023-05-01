@@ -1,9 +1,13 @@
 {
   "name": "@forjagames/unitypm",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Unity Package Manager allows you to manage local dependences for Unity",
   "main": "index.js",
   "type": "module",
+  "bin": {
+    "unitypm": "./index.js",
+    "upm": "./index.js"
+  },
   "preferGlobal": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/lcnvdl/unitypm.git"
   },
-  "keywords": [],
+  "keywords": ["unity", "package manager", "unitypm"],
   "author": "Forja Games",
   "license": "MIT",
   "bugs": {
@@ -21,7 +25,6 @@
   "homepage": "https://github.com/lcnvdl/unitypm#readme",
   "dependencies": {
     "colors": "^1.4.0",
-    "commander": "^10.0.1",
-    "inquirer": "^9.2.0"
+    "commander": "^10.0.1"
   }
 }

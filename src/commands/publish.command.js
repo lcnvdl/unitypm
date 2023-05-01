@@ -53,7 +53,7 @@ export default class PublishCommand extends BaseCommand {
 
   readAndValidatePackage() {
     if (!fs.existsSync('./package.json')) {
-      throw new Error(`Package is missing. Please run 'unitypm init'.`);
+      throw new Error(`Package is missing. Please run 'upm init' or 'unitypm init'.`);
     }
 
     console.log(`Reading 'package.json'...`);
