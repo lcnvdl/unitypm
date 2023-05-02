@@ -33,16 +33,12 @@ export default class PublishCommand extends BaseCommand {
 
   addToLibraryAndSave(pck) {
     this.environment.load();
-    const existing = this.environment.library.findIndex(pck.name);
-
-    const metadata = { ...pck, date: new Date() };
-
+    const existing = this.environment.library.addOrReplacePackage(pck);
+    
     if (existing !== -1) {
-      this.environment.library.packages[existing] = metadata;
       console.log(`Package '${pck.name}' updated.`);
     }
     else {
-      this.environment.library.packages.push(metadata);
       console.log(`Package '${pck.name}' added to library.`);
     }
 

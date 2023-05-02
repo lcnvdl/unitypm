@@ -23,6 +23,10 @@ export default class FilesStub {
     delete this.files[path];
   }
 
+  rmSync(path) {
+    delete this.files[path];
+  }
+
   copyFileSync(src, dest) {
     this.files[dest] = this.files[src];
   }

@@ -21,6 +21,25 @@ export default class VersionsLibrary {
     return this.packages.some(m => m.name === name);
   }
 
+  get(name) {
+    return this.packages.find(m => m.name === name);
+  }
+
+  addOrReplacePackage(pck) {
+    const existing = this.findIndex(pck.name);
+
+    const metadata = { ...pck, date: new Date() };
+
+    if (existing !== -1) {
+      this.packages[existing] = metadata;
+    }
+    else {
+      this.packages.push(metadata);
+    }
+
+    return existing;
+  }
+
   loadOrCreate() {
     if (!this.fs.existsSync(this.libFile)) {
       this.save();

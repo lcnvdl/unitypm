@@ -25,7 +25,7 @@ environment.initialize();
 
 /** @type { BaseCommand[] } */
 const allCommands = [
-  new InitCommand(),
+  new InitCommand(environment),
   new InstallCommand(environment),
   new PublishCommand(environment),
   new UnpublishCommand(environment),

@@ -4,6 +4,7 @@
 import path from 'path';
 import BaseCommand from '../base/base-command.js';
 import assert from 'assert';
+import VersionsLibrary from '../versions-library.js';
 
 export default class InstallCommand extends BaseCommand {
   /**
@@ -33,8 +34,8 @@ export default class InstallCommand extends BaseCommand {
       throw new Error(`Package '${pckName}' not found. If you want to force the installation you can use the --force option.`);
     }
 
-    console.log(`Running 'npm link ${pckName}'...`);
-    const result = await npm.runCommand(`npm link ${pckName}`, { cwd: this.environment.appdir });
+    console.log(`Running 'npm link ${pckName} --save'...`);
+    const result = await npm.runCommand(`npm link ${pckName} --save`, { cwd: this.environment.appdir });
     if (result.stderr) {
       throw new Error(result.stderr);
     }
@@ -54,7 +55,8 @@ export default class InstallCommand extends BaseCommand {
     if (fs.existsSync(pckFolder)) {
       if (options.force) {
         console.log(`Deleting '${pckFolder}'...`);
-        fs.rmdirSync(pckFolder, { recursive: true });
+        fs.rmSync(pckFolder, { recursive: true });
+        this.logSuccess();
       }
       else {
         throw new Error(`Package '${pckName}' was already installed. If you want to force the installation you can use the --force option.`);
@@ -63,6 +65,18 @@ export default class InstallCommand extends BaseCommand {
 
     console.log(`Copying files...`);
     this.copyRecursiveSync(libraryFolder, pckFolder);
+    this.logSuccess();
+
+    console.log(`Adding to local package...`);
+    const packageInfo = this.environment.library.exists(pckName);
+    const localPackages = new VersionsLibrary('local-packages.json', this.environment.fs);
+    localPackages.loadOrCreate();
+    localPackages.addOrReplacePackage({
+      name: packageInfo.name,
+      version: packageInfo.version,
+    });
+    localPackages.save();
+    this.logSuccess();
   }
 
   copyRecursiveSync(src, dest) {

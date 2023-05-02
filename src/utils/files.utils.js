@@ -17,8 +17,12 @@ export default class Files {
     return fs.statSync(path);
   }
 
-  rmdirSync(path) {
-    return fs.rmdirSync(path);
+  rmdirSync(path, opts) {
+    return fs.rmdirSync(path, opts);
+  }
+
+  rmSync(path, opts) {
+    return fs.rmSync(path, opts);
   }
 
   copyFileSync(src, dest) {

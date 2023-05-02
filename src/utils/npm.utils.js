@@ -4,7 +4,7 @@ const exec = util.promisify(child_process.exec);
 
 export default class NPM {
   async runCommand(cmd, options) {
-    const { stdout, stderr } = await exec(cmd, options);
+    let { stdout, stderr } = await exec(cmd, options);
 
     if (stderr && stderr !== "") {
       const hasErrors = stderr.split("\n").map(m => m.trim()).some(m => m && m !== "" && m.indexOf("npm WARN") === -1);
