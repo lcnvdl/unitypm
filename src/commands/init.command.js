@@ -1,12 +1,19 @@
 /** @typedef {import('commander').Command} Command */
+/** @typedef {import('../environment.js').default} Environment */
 
-import fs from 'fs';
-import NPM from '../utils/npm.utils.js';
 import BaseCommand from '../base/base-command.js';
+import assert from 'assert';
 
 class InitCommand extends BaseCommand {
-  constructor() {
-    super('init', 'Creates a package file for the Unity project.')
+  /**
+  * @param {Environment} environment
+  */
+  constructor(environment) {
+    super('init', 'Creates a package file for the Unity project.');
+
+    this.environment = environment;
+
+    assert.ok(environment);
   }
 
   /**
@@ -17,11 +24,13 @@ class InitCommand extends BaseCommand {
   }
 
   async run(value, options) {
+    const { fs, npm } = this.environment;
+
     if (fs.existsSync('./package.json')) {
       throw new Error(`Package already exists.`);
     }
 
-    const result = await NPM.init();
+    const result = await npm.init();
     if (result.stderr) {
       throw new Error(result.stderr);
     }

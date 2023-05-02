@@ -44,6 +44,10 @@ class BaseCommand {
     console.error(colors.red(error));
   }
 
+  logError(msg) {
+    console.error(colors.red(error));
+  }
+
   logSuccess(msg) {
     console.log(colors.green(msg || ' - Ok'));
   }

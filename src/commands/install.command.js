@@ -1,10 +1,8 @@
 /** @typedef {import('commander').Command} Command */
 /** @typedef {import('../environment.js').default} Environment */
 
-import fs from 'fs';
 import path from 'path';
 import BaseCommand from '../base/base-command.js';
-import NPM from '../utils/npm.utils.js';
 import assert from 'assert';
 
 export default class InstallCommand extends BaseCommand {
@@ -12,7 +10,7 @@ export default class InstallCommand extends BaseCommand {
    * @param {Environment} environment
    */
   constructor(environment) {
-    super('install', 'Installs a package.')
+    super('install', 'Installs a package.');
 
     this.environment = environment;
 
@@ -29,12 +27,14 @@ export default class InstallCommand extends BaseCommand {
   }
 
   async run(pckName, options) {
-    if (!options.force && !this.environment.exists(pckName)) {
+    const { fs, npm } = this.environment;
+
+    if (!options.force && !this.environment.library.exists(pckName)) {
       throw new Error(`Package '${pckName}' not found. If you want to force the installation you can use the --force option.`);
     }
 
     console.log(`Running 'npm link ${pckName}'...`);
-    const result = await NPM.runCommand(`npm link ${pckName}`, { cwd: this.environment.appdir });
+    const result = await npm.runCommand(`npm link ${pckName}`, { cwd: this.environment.appdir });
     if (result.stderr) {
       throw new Error(result.stderr);
     }
@@ -42,7 +42,7 @@ export default class InstallCommand extends BaseCommand {
 
     const libraryFolder = path.join(this.environment.appdir, 'node_modules', pckName);
     if (!fs.existsSync(libraryFolder)) {
-      throw new Error(`Missing directory: ${libraryFolder}.`);
+      throw new Error(`Missing '${libraryFolder}' directory.`);
     }
 
     if (!fs.existsSync('./unity-packages')) {
@@ -66,6 +66,8 @@ export default class InstallCommand extends BaseCommand {
   }
 
   copyRecursiveSync(src, dest) {
+    const fs = this.environment.fs;
+
     let exists = fs.existsSync(src);
     let stats = exists && fs.statSync(src);
     let isDirectory = exists && stats.isDirectory();
@@ -83,6 +85,8 @@ export default class InstallCommand extends BaseCommand {
   }
 
   deleteRecursiveSync(src, dest) {
+    const fs = this.environment.fs;
+
     let exists = fs.existsSync(src);
     let stats = exists && fs.statSync(src);
     let isDirectory = exists && stats.isDirectory();

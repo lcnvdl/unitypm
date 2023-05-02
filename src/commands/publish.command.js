@@ -1,9 +1,7 @@
 /** @typedef {import('commander').Command} Command */
 /** @typedef {import('../environment.js').default} Environment */
 
-import fs from 'fs';
 import BaseCommand from '../base/base-command.js';
-import NPM from '../utils/npm.utils.js';
 import assert from 'assert';
 
 export default class PublishCommand extends BaseCommand {
@@ -11,7 +9,7 @@ export default class PublishCommand extends BaseCommand {
    * @param {Environment} environment
    */
   constructor(environment) {
-    super('publish', 'Publish the package locally.')
+    super('publish', 'Publish the package locally.');
 
     this.environment = environment;
 
@@ -35,7 +33,7 @@ export default class PublishCommand extends BaseCommand {
 
   addToLibraryAndSave(pck) {
     this.environment.load();
-    const existing = this.environment.library.packages.findIndex(m => m.name === pck.name);
+    const existing = this.environment.library.findIndex(pck.name);
 
     const metadata = { ...pck, date: new Date() };
 
@@ -52,6 +50,8 @@ export default class PublishCommand extends BaseCommand {
   }
 
   readAndValidatePackage() {
+    const { fs } = this.environment;
+
     if (!fs.existsSync('./package.json')) {
       throw new Error(`Package is missing. Please run 'upm init' or 'unitypm init'.`);
     }
@@ -73,8 +73,10 @@ export default class PublishCommand extends BaseCommand {
   }
 
   async linkToNode() {
-    console.log(`Running 'npm link'...`)
-    const result = await NPM.runCommand('npm link');
+    const { npm } = this.environment;
+
+    console.log(`Running 'npm link'...`);
+    const result = await npm.runCommand('npm link');
     if (result.stderr) {
       throw new Error(result.stderr);
     }

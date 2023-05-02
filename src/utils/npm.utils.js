@@ -2,8 +2,8 @@ import util from 'util';
 import child_process from 'child_process';
 const exec = util.promisify(child_process.exec);
 
-class NPM {
-  static async runCommand(cmd, options) {
+export default class NPM {
+  async runCommand(cmd, options) {
     const { stdout, stderr } = await exec(cmd, options);
 
     if (stderr && stderr !== "") {
@@ -16,9 +16,7 @@ class NPM {
     return { stdout, stderr };
   }
 
-  static async init() {
-    return NPM.runCommand('npm init -y');
+  async init() {
+    return this.runCommand('npm init -y');
   }
 }
-
-export default NPM;

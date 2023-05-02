@@ -1,10 +1,21 @@
 import { homedir } from 'os'
 import path from 'path';
-import fs from 'fs';
+import VersionsLibrary from './versions-library.js';
+import Files from './utils/files.utils.js';
+import NPM from './utils/npm.utils.js';
 
 export default class Environment {
-  constructor() {
-    this.library = { packages: [] };
+  /**
+   * @param {Files} [files] Files manager
+   * @param {NPM} [npm] NPM
+   */
+  constructor(files, npm) {
+    /** @type {Files} */
+    this.fs = files || new Files();
+    /** @type {NPM} */
+    this.npm = npm || new NPM();
+
+    this.library = new VersionsLibrary(this.libFile, this.fs);
   }
 
   get homedir() {
@@ -20,28 +31,18 @@ export default class Environment {
   }
 
   initialize() {
-    if (!fs.existsSync(this.appdir)) {
-      fs.mkdirSync(this.appdir);
+    if (!this.fs.existsSync(this.appdir)) {
+      this.fs.mkdirSync(this.appdir);
     }
 
-    if (!fs.existsSync(this.libFile)) {
-      this.save();
-    }
-    else {
-      this.load();
-    }
-  }
-
-  exists(name) {
-    return this.library.packages.some(m => m.name === name);
+    this.library.loadOrCreate();
   }
 
   load() {
-    this.library = JSON.parse(fs.readFileSync(this.libFile, 'utf-8'));
-    this.library.packages = this.library.packages || [];
+    this.library.load();
   }
 
   save() {
-    fs.writeFileSync(this.libFile, JSON.stringify(this.library), 'utf-8');
+    this.library.save();
   }
 }

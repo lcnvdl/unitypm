@@ -9,6 +9,8 @@ import Environment from './src/environment.js';
 import InitCommand from './src/commands/init.command.js';
 import InstallCommand from './src/commands/install.command.js';
 import PublishCommand from './src/commands/publish.command.js';
+import UpdateCommand from './src/commands/update.command.js';
+import UnpublishCommand from './src/commands/unpublish.command.js';
 import ListCommand from './src/commands/list.command.js';
 
 const { name, description, version } = packg;
@@ -26,6 +28,8 @@ const allCommands = [
   new InitCommand(),
   new InstallCommand(environment),
   new PublishCommand(environment),
+  new UnpublishCommand(environment),
+  new UpdateCommand(environment),
   new ListCommand(environment),
 ];
 
