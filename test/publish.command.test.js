@@ -52,8 +52,6 @@ describe('InitCommand', () => {
       cmd.environment.fs.writeFileSync('./package.json', JSON.stringify({ name: 'hola', version: '1.0.0', description: 'test' }), 'utf8');
       await cmd.run();
 
-      console.log(cmd.environment.fs);
-
       const keys = Object.keys(cmd.environment.fs.files);
 
       expect(keys.length).to.eq(3);
