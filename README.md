@@ -22,6 +22,7 @@ The tool provides the following commands:
 * unpublish: Removes a package from the local repository.
 * install: Installs a package from the local repository into the current Unity project.
 * update: Updates the installed packages to the latest version.
+* list: Shows the list of local packages.
 
 To use the tool, open a terminal window in the Unity project folder and run the desired command.
 
