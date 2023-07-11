@@ -68,8 +68,14 @@ export default class InstallCommand extends BaseCommand {
     this.logSuccess();
 
     console.log(`Adding to local package...`);
-    const packageInfo = this.environment.library.exists(pckName);
+    const packageInfo = this.environment.library.get(pckName);
+
+    if (!packageInfo) {
+      throw new Error(`Missing package info for ${pckName}.`);
+    }
+
     const localPackages = new VersionsLibrary('local-packages.json', this.environment.fs);
+
     localPackages.loadOrCreate();
     localPackages.addOrReplacePackage({
       name: packageInfo.name,

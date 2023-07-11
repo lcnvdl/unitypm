@@ -28,7 +28,7 @@ export default class VersionsLibrary {
   addOrReplacePackage(pck) {
     const existing = this.findIndex(pck.name);
 
-    const metadata = { ...pck, date: new Date() };
+    const metadata = Object.assign({}, pck || {}, { date: new Date() });
 
     if (existing !== -1) {
       this.packages[existing] = metadata;
@@ -51,7 +51,7 @@ export default class VersionsLibrary {
 
   load() {
     const { packages } = JSON.parse(this.fs.readFileSync(this.libFile, 'utf-8'));
-    this.packages = packages || [];
+    this.packages = (packages || []).filter(m => !!m.name);
   }
 
   save() {

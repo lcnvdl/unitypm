@@ -1,6 +1,6 @@
 {
   "name": "@forjagames/unitypm",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Unity Package Manager allows you to manage local dependences for Unity",
   "main": "index.js",
   "type": "module",
